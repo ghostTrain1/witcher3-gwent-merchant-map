@@ -1,6 +1,6 @@
 {
   "variant": "B",
-  "version": "1.0.9-local.3",
+  "version": "1.0.9-local.3-hotfix.1",
   "files": [
     {
       "path": "bin/config/r4game/user_config_matrix/pc/modGwentPlayersMap.xml",
@@ -76,7 +76,7 @@
     },
     {
       "path": "mods/modGwentPlayersMap/content/scripts/local/gwm.ws",
-      "sha256": "07a60ac27225d12c297c48278b60ebc5b5a06fc4c278662d1378685cf020f31c"
+      "sha256": "4b8f9e1d416022ac4f1835a7d3d0fd28b74c1737b15e1871ea4f451892b7f6f8"
     },
     {
       "path": "mods/modGwentPlayersMap/content/scripts/local/gwm_data.ws",

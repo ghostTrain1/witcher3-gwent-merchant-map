@@ -20,7 +20,7 @@
 
 function GwmVersion() : string
 {
-	return "1.0.9-local.3";
+	return "1.0.9-local.3-hotfix.1";
 }
 
 struct GwmPin
@@ -938,7 +938,7 @@ function GwmRoleText( pin : GwmPin ) : string
         FactsSet( leftKey, count, -1 );
         FactsSet( seenKey, 1, -1 );
     }
-    actorTag = StringToName( "gwm_shop_actor_" + pins[ idx ].id );
+    actorTag = GwmLocalShopActorTag( pins[ idx ].id );
     if ( !npc.HasTag( actorTag ) ) { npc.AddTag( actorTag ); }
 }
 
@@ -947,7 +947,7 @@ function GwmRoleText( pin : GwmPin ) : string
     var npc : CNewNPC;
     if ( pins[ idx ].world != GwmCurrentWorldKey() ) { return NULL; }
     if ( IsNameValid( pins[ idx ].tag ) ) { npc = theGame.GetNPCByTag( pins[ idx ].tag ); }
-    if ( !npc ) { npc = theGame.GetNPCByTag( StringToName( "gwm_shop_actor_" + pins[ idx ].id ) ); }
+    if ( !npc ) { npc = theGame.GetNPCByTag( GwmLocalShopActorTag( pins[ idx ].id ) ); }
     return npc;
 }
 
@@ -1011,7 +1011,7 @@ function GwmRoleText( pin : GwmPin ) : string
         if ( !IsNameValid( markerType ) ) { continue; }
         // One reminder per actor avoids two icons on top of each other: duel first,
         // then purchase. Uses native minimap-supported symbols, not the world-map SWF.
-        markerTag = StringToName( "gwm_mini_" + pins[ i ].id );
+        markerTag = GwmLocalMinimapTag( pins[ i ].id );
         if ( !npc.HasTag( markerTag ) ) { npc.AddTag( markerTag ); }
         for ( j = 0; j < localMiniTags.Size(); j += 1 )
         {
@@ -1048,3 +1048,203 @@ function GwmRoleText( pin : GwmPin ) : string
         GwmGetData().LocalUpdateMinimap();
     }
 }
+
+// Fixed name literals: Remastered has no StringToName API. Generated from the shipped pin IDs.
+function GwmLocalShopActorTag( id : int ) : name
+{
+    switch ( id )
+    {
+        case 2: return 'gwm_shop_actor_2';
+        case 3: return 'gwm_shop_actor_3';
+        case 4: return 'gwm_shop_actor_4';
+        case 5: return 'gwm_shop_actor_5';
+        case 6: return 'gwm_shop_actor_6';
+        case 7: return 'gwm_shop_actor_7';
+        case 8: return 'gwm_shop_actor_8';
+        case 9: return 'gwm_shop_actor_9';
+        case 10: return 'gwm_shop_actor_10';
+        case 11: return 'gwm_shop_actor_11';
+        case 12: return 'gwm_shop_actor_12';
+        case 13: return 'gwm_shop_actor_13';
+        case 14: return 'gwm_shop_actor_14';
+        case 15: return 'gwm_shop_actor_15';
+        case 16: return 'gwm_shop_actor_16';
+        case 17: return 'gwm_shop_actor_17';
+        case 18: return 'gwm_shop_actor_18';
+        case 19: return 'gwm_shop_actor_19';
+        case 20: return 'gwm_shop_actor_20';
+        case 21: return 'gwm_shop_actor_21';
+        case 22: return 'gwm_shop_actor_22';
+        case 23: return 'gwm_shop_actor_23';
+        case 24: return 'gwm_shop_actor_24';
+        case 25: return 'gwm_shop_actor_25';
+        case 26: return 'gwm_shop_actor_26';
+        case 27: return 'gwm_shop_actor_27';
+        case 28: return 'gwm_shop_actor_28';
+        case 29: return 'gwm_shop_actor_29';
+        case 30: return 'gwm_shop_actor_30';
+        case 31: return 'gwm_shop_actor_31';
+        case 32: return 'gwm_shop_actor_32';
+        case 33: return 'gwm_shop_actor_33';
+        case 34: return 'gwm_shop_actor_34';
+        case 35: return 'gwm_shop_actor_35';
+        case 36: return 'gwm_shop_actor_36';
+        case 37: return 'gwm_shop_actor_37';
+        case 38: return 'gwm_shop_actor_38';
+        case 39: return 'gwm_shop_actor_39';
+        case 40: return 'gwm_shop_actor_40';
+        case 41: return 'gwm_shop_actor_41';
+        case 42: return 'gwm_shop_actor_42';
+        case 43: return 'gwm_shop_actor_43';
+        case 44: return 'gwm_shop_actor_44';
+        case 45: return 'gwm_shop_actor_45';
+        case 46: return 'gwm_shop_actor_46';
+        case 47: return 'gwm_shop_actor_47';
+        case 48: return 'gwm_shop_actor_48';
+        case 49: return 'gwm_shop_actor_49';
+        case 51: return 'gwm_shop_actor_51';
+        case 52: return 'gwm_shop_actor_52';
+        case 53: return 'gwm_shop_actor_53';
+        case 54: return 'gwm_shop_actor_54';
+        case 56: return 'gwm_shop_actor_56';
+        case 57: return 'gwm_shop_actor_57';
+        case 58: return 'gwm_shop_actor_58';
+        case 59: return 'gwm_shop_actor_59';
+        case 60: return 'gwm_shop_actor_60';
+        case 61: return 'gwm_shop_actor_61';
+        case 62: return 'gwm_shop_actor_62';
+        case 63: return 'gwm_shop_actor_63';
+        case 64: return 'gwm_shop_actor_64';
+        case 65: return 'gwm_shop_actor_65';
+        case 66: return 'gwm_shop_actor_66';
+        case 67: return 'gwm_shop_actor_67';
+        case 68: return 'gwm_shop_actor_68';
+        case 69: return 'gwm_shop_actor_69';
+        case 70: return 'gwm_shop_actor_70';
+        case 71: return 'gwm_shop_actor_71';
+        case 72: return 'gwm_shop_actor_72';
+        case 73: return 'gwm_shop_actor_73';
+        case 74: return 'gwm_shop_actor_74';
+        case 75: return 'gwm_shop_actor_75';
+        case 76: return 'gwm_shop_actor_76';
+        case 77: return 'gwm_shop_actor_77';
+        case 78: return 'gwm_shop_actor_78';
+        case 79: return 'gwm_shop_actor_79';
+        case 80: return 'gwm_shop_actor_80';
+        case 81: return 'gwm_shop_actor_81';
+        case 82: return 'gwm_shop_actor_82';
+        case 83: return 'gwm_shop_actor_83';
+        case 84: return 'gwm_shop_actor_84';
+        case 85: return 'gwm_shop_actor_85';
+        case 86: return 'gwm_shop_actor_86';
+        case 87: return 'gwm_shop_actor_87';
+        case 88: return 'gwm_shop_actor_88';
+        case 89: return 'gwm_shop_actor_89';
+        case 90: return 'gwm_shop_actor_90';
+        case 91: return 'gwm_shop_actor_91';
+        case 92: return 'gwm_shop_actor_92';
+        case 93: return 'gwm_shop_actor_93';
+        case 99: return 'gwm_shop_actor_99';
+        default: return '';
+    }
+}
+
+function GwmLocalMinimapTag( id : int ) : name
+{
+    switch ( id )
+    {
+        case 2: return 'gwm_mini_2';
+        case 3: return 'gwm_mini_3';
+        case 4: return 'gwm_mini_4';
+        case 5: return 'gwm_mini_5';
+        case 6: return 'gwm_mini_6';
+        case 7: return 'gwm_mini_7';
+        case 8: return 'gwm_mini_8';
+        case 9: return 'gwm_mini_9';
+        case 10: return 'gwm_mini_10';
+        case 11: return 'gwm_mini_11';
+        case 12: return 'gwm_mini_12';
+        case 13: return 'gwm_mini_13';
+        case 14: return 'gwm_mini_14';
+        case 15: return 'gwm_mini_15';
+        case 16: return 'gwm_mini_16';
+        case 17: return 'gwm_mini_17';
+        case 18: return 'gwm_mini_18';
+        case 19: return 'gwm_mini_19';
+        case 20: return 'gwm_mini_20';
+        case 21: return 'gwm_mini_21';
+        case 22: return 'gwm_mini_22';
+        case 23: return 'gwm_mini_23';
+        case 24: return 'gwm_mini_24';
+        case 25: return 'gwm_mini_25';
+        case 26: return 'gwm_mini_26';
+        case 27: return 'gwm_mini_27';
+        case 28: return 'gwm_mini_28';
+        case 29: return 'gwm_mini_29';
+        case 30: return 'gwm_mini_30';
+        case 31: return 'gwm_mini_31';
+        case 32: return 'gwm_mini_32';
+        case 33: return 'gwm_mini_33';
+        case 34: return 'gwm_mini_34';
+        case 35: return 'gwm_mini_35';
+        case 36: return 'gwm_mini_36';
+        case 37: return 'gwm_mini_37';
+        case 38: return 'gwm_mini_38';
+        case 39: return 'gwm_mini_39';
+        case 40: return 'gwm_mini_40';
+        case 41: return 'gwm_mini_41';
+        case 42: return 'gwm_mini_42';
+        case 43: return 'gwm_mini_43';
+        case 44: return 'gwm_mini_44';
+        case 45: return 'gwm_mini_45';
+        case 46: return 'gwm_mini_46';
+        case 47: return 'gwm_mini_47';
+        case 48: return 'gwm_mini_48';
+        case 49: return 'gwm_mini_49';
+        case 51: return 'gwm_mini_51';
+        case 52: return 'gwm_mini_52';
+        case 53: return 'gwm_mini_53';
+        case 54: return 'gwm_mini_54';
+        case 56: return 'gwm_mini_56';
+        case 57: return 'gwm_mini_57';
+        case 58: return 'gwm_mini_58';
+        case 59: return 'gwm_mini_59';
+        case 60: return 'gwm_mini_60';
+        case 61: return 'gwm_mini_61';
+        case 62: return 'gwm_mini_62';
+        case 63: return 'gwm_mini_63';
+        case 64: return 'gwm_mini_64';
+        case 65: return 'gwm_mini_65';
+        case 66: return 'gwm_mini_66';
+        case 67: return 'gwm_mini_67';
+        case 68: return 'gwm_mini_68';
+        case 69: return 'gwm_mini_69';
+        case 70: return 'gwm_mini_70';
+        case 71: return 'gwm_mini_71';
+        case 72: return 'gwm_mini_72';
+        case 73: return 'gwm_mini_73';
+        case 74: return 'gwm_mini_74';
+        case 75: return 'gwm_mini_75';
+        case 76: return 'gwm_mini_76';
+        case 77: return 'gwm_mini_77';
+        case 78: return 'gwm_mini_78';
+        case 79: return 'gwm_mini_79';
+        case 80: return 'gwm_mini_80';
+        case 81: return 'gwm_mini_81';
+        case 82: return 'gwm_mini_82';
+        case 83: return 'gwm_mini_83';
+        case 84: return 'gwm_mini_84';
+        case 85: return 'gwm_mini_85';
+        case 86: return 'gwm_mini_86';
+        case 87: return 'gwm_mini_87';
+        case 88: return 'gwm_mini_88';
+        case 89: return 'gwm_mini_89';
+        case 90: return 'gwm_mini_90';
+        case 91: return 'gwm_mini_91';
+        case 92: return 'gwm_mini_92';
+        case 93: return 'gwm_mini_93';
+        case 99: return 'gwm_mini_99';
+        default: return '';
+    }
+}
+

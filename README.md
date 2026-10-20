@@ -2,14 +2,22 @@
 
 [下载两个版本](https://github.com/ghostTrain1/witcher3-gwent-merchant-map/releases) · [许可与署名](NOTICE.md) · [验证范围](docs/VERIFICATION.md)
 
-**PC 重制版 / Remastered 定制分支；不是原版1.32。A、B二选一，不能同时安装。当前均为未经本分支实机验收的预览版。**
+**PC 重制版 / Remastered 定制分支；不是原版1.32。A、B二选一，不能同时安装。仍为预览版；B修复版已获本机用户确认可启动，完整功能与其他环境兼容性未完成验收。**
+
+## B 编译修复（2026-10-20）
+
+- 最新版：**1.0.9-local.3-hotfix.1**，修复 `gwm.ws` 第941、950、1014行的 `Could not find function 'StringToName'`。
+- 原因是本分支调用了本机重制版没有的函数，不是要求玩家更换存档或修改原版脚本。
+- 以固定名称表替代动态字符串转名称；保留商店/小地图标签名称及购牌辅助事实，不重置已有进度。
+- 本机用户反馈修复后可以运行；买齐自动隐藏、小地图具体画面与跨存档持久化仍需分别验证，仍标记预览。
+- 已装旧B：退出游戏，用安装旧版时保留的卸载器卸载，再完整解压并安装本修复版。安装器会拒绝覆盖已有文件。A版不受本次问题影响，不需要为此更新。
 
 ## 选哪个版本？
 
 | 版本 | 下载 | 功能 |
 |---|---|---|
 | A：首胜自动隐藏版 | [GwentMap-A-WorldMap.zip](https://github.com/ghostTrain1/witcher3-gwent-merchant-map/releases/download/v1.0.9-local.2/GwentMap-A-WorldMap.zip) | 大地图、读取旧首胜、首胜后隐藏；购牌仅查询当前已加载库存，没有小地图和持久购买记录 |
-| B：购牌跟踪＋小地图版 | [GwentMap-B-Minimap.zip](https://github.com/ghostTrain1/witcher3-gwent-merchant-map/releases/download/v1.0.9-local.3/GwentMap-B-Minimap.zip) | A的首胜功能；实购库存核验、买齐隐藏、未买齐保留；附近小地图提示 |
+| B：购牌跟踪＋小地图版 | [GwentMap-B-Minimap-hotfix.1.zip](https://github.com/ghostTrain1/witcher3-gwent-merchant-map/releases/download/v1.0.9-local.3-hotfix.1/GwentMap-B-Minimap-hotfix.1.zip) | A的首胜功能；实购库存核验、买齐隐藏、未买齐保留；附近小地图提示 |
 
 **旧存档可以安装，不需要使用作者的存档或商人清单。**
 
@@ -49,7 +57,7 @@
 
 固定对手列表约91点，不保证覆盖所有可对战NPC或所有仅卖牌的商人。商人按作息/任务出现。修改 `panel_worldmap.redswf` 的其他地图Mod需要对应合并文件；只会加载一份地图资源。
 
-B新增的HUD/交易钩子尚未经过本分支实际游戏编译和画面验收。已有离线状态、跨存档隔离、安装/卸载、补丁和回滚检查，不能把这些说成游戏里已成功显示。出现脚本错误请保留完整报错，退出游戏后卸载本Mod，并在 Issues 提交版本、其他Mod列表和截图，**不要公开上传私人存档或凭据**。
+B旧版 local.3 因三处不存在的 `StringToName` 调用会编译失败，请勿继续下载使用。B修复版 `1.0.9-local.3-hotfix.1` 改用与地点ID一一对应的固定 `name` 标签；本机用户已确认可以运行。这不是全部HUD/交易钩子、持久化及画面的完整验收。已有离线状态、跨存档隔离、安装/卸载、补丁和回滚检查，不能把这些说成游戏里已成功显示。出现脚本错误请保留完整报错，退出游戏后卸载本Mod，并在 Issues 提交版本、其他Mod列表和截图，**不要公开上传私人存档或凭据**。
 
 ## 卸载
 
