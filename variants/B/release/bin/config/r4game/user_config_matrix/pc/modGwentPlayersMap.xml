@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- In-game settings for Gwent Players Map (Options > Mods).
+     Labels come from the mod's w3strings (mods\modGwentPlayersMap\content\*.w3strings):
+       panel_mods, panel_gwentplayersmap (title, with the version), option_gwm_*, preset_value_gwm_* -->
+<UserConfig>
+	<Group id="GwentPlayersMap" displayName="Mods.gwentplayersmap">
+		<VisibleVars>
+			<Var id="GwmShowPins" displayName="gwm_show_pins" displayType="TOGGLE"/>
+			<Var id="GwmShowSellers" displayName="gwm_show_sellers" displayType="TOGGLE"/>
+			<Var id="GwmCardSize" displayName="gwm_card_size" displayType="OPTIONS">
+				<OptionsArray>
+					<Option id="0" displayName="gwm_card_small">
+						<Entry varId="GwmCardSize" value="0"/>
+					</Option>
+					<Option id="1" displayName="gwm_card_large">
+						<Entry varId="GwmCardSize" value="1"/>
+					</Option>
+				</OptionsArray>
+			</Var>
+			<Var id="GwmNotify" displayName="gwm_notify" displayType="TOGGLE"/>
+			<Var id="GwmDebug" displayName="gwm_debug" displayType="TOGGLE"/>
+		</VisibleVars>
+	</Group>
+</UserConfig>

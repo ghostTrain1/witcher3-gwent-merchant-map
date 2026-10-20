@@ -1,0 +1,358 @@
+--- a/mods/modGwentPlayersMap/content/scripts/local/gwm.ws
++++ b/mods/modGwentPlayersMap/content/scripts/local/gwm.ws
+@@ -20,7 +20,7 @@
+ 
+ function GwmVersion() : string
+ {
+-	return "1.0.9";
++	return "1.0.9-local.3";
+ }
+ 
+ struct GwmPin
+@@ -288,7 +288,8 @@
+ 		{
+ 			return true;
+ 		}
+-		if ( IsNameValid( pins[ idx ].card ) && thePlayer.inv.HasItem( pins[ idx ].card ) )
++		if ( IsNameValid( pins[ idx ].card ) && ( thePlayer.inv.HasItem( pins[ idx ].card )
++			|| theGame.GetGwintManager().HasCardInCollection( theGame.GetGwintManager().GetCardNameFromItemName( pins[ idx ].card ) ) ) )
+ 		{
+ 			return true;
+ 		}
+@@ -440,7 +441,7 @@
+ 	}
+ 	if ( config.GetVarValue( 'GwentPlayersMap', 'GwmShowSellers' ) == "" )
+ 	{
+-		config.SetVarValue( 'GwentPlayersMap', 'GwmShowSellers', "false" );
++		config.SetVarValue( 'GwentPlayersMap', 'GwmShowSellers', "true" );
+ 		changed = true;
+ 	}
+ 	if ( config.GetVarValue( 'GwentPlayersMap', 'GwmNotify' ) == "" )
+@@ -585,7 +586,7 @@
+ 
+ 	largeCards = theGame.GetInGameConfigWrapper().GetVarValue( 'GwentPlayersMap', 'GwmCardSize' ) == "1";
+ 	showDefeated = GwmConfigBool( 'GwmShowDefeated', true );
+-	showSellers = GwmConfigBool( 'GwmShowSellers', false );
++	showSellers = GwmConfigBool( 'GwmShowSellers', true );
+ 
+ 	// Shop icons the vanilla map is showing, to line the cards up with.
+ 	instances = mapManager.GetMapPinInstances( worldPath );
+@@ -609,7 +610,7 @@
+ 		defeated = data.IsDefeated( i );
+ 		unavailable = !defeated && data.IsUnavailable( i );
+ 		// Players no longer available are greyed out like beaten ones and follow the same option.
+-		if ( ( defeated || unavailable ) && !showDefeated )
++		if ( defeated || ( unavailable && !showDefeated ) )
+ 		{
+ 			continue;
+ 		}
+@@ -677,7 +678,7 @@
+ 		// The legend row takes its text from the label, so the label is the same for every card.
+ 		obj.SetMemberFlashString( "label", GwmLoc( "gwm_label_gwent_player", "Gwent player" ) );
+ 		description = GwmRoleText( data.pins[ i ] ) + " - " + GwmStatusText( data.pins[ i ], defeated, unavailable ) + GwmNoteText( data.pins[ i ] )
+-			+ GwmSellerText( showSellers && !unavailable && data.SellsCardsYouLack( i ) );
++			+ ( data.LocalSellerText( i, showSellers && !unavailable ) );
+ 		if ( showDebug && showSellers )
+ 		{
+ 			missing = data.MissingStoreCards( i );
+@@ -691,6 +692,8 @@
+ 		added += 1;
+ 	}
+ 
++	GwmAppendShopPins( flashArray, data, worldKey, showSellers );
++
+ 	if ( showDebug )
+ 	{
+ 		if ( data.CardIconsLoaded() )
+@@ -732,7 +735,7 @@
+ 	{
+ 		return GwmLoc( "gwm_status_unavailable", "No longer available." );
+ 	}
+-	if ( IsNameValid( pin.card ) && !IsNameValid( pin.tag ) )
++	if ( IsNameValid( pin.card ) )
+ 	{
+ 		if ( defeated )
+ 		{
+@@ -742,9 +745,9 @@
+ 	}
+ 	if ( defeated )
+ 	{
+-		return GwmLoc( "gwm_status_beaten", "Already beaten." );
+-	}
+-	return GwmLoc( "gwm_status_not_beaten", "Not beaten yet." );
++		return "已赢过：存档存在首胜或本 Mod 胜利记录。";
++	}
++	return "未发现首胜记录（不代表从未打过）。";
+ }
+ 
+ // Optional spoiler-free note after the status (English fallbacks match gen_strings.py).
+@@ -789,3 +792,259 @@
+ {
+ 	return GwmLoc( pin.roleKey, pin.role );
+ }
++
++
++// Local customization 2026-10-19. Original: mateusands, CC BY-NC-SA 4.0.
++// -1 means unavailable to the streaming world, NOT sold out. Do not invent remote stock.
++@addMethod( GwmData ) function LocalLiveStock( idx : int ) : int
++{
++    var npc : CNewNPC;
++    var inventory : CInventoryComponent;
++    var ids : array< SItemUniqueId >;
++    var k, count : int;
++    if ( pins[ idx ].world != GwmCurrentWorldKey() )
++    {
++        return -1;
++    }
++    npc = LocalKnownNpc( idx );
++    if ( !npc ) { return -1; }
++    inventory = npc.GetInventory();
++    if ( !inventory ) { return -1; }
++    inventory.GetAllItems( ids );
++    for ( k = 0; k < ids.Size(); k += 1 )
++    {
++        if ( inventory.ItemHasTag( ids[ k ], 'GwintCard' ) )
++        {
++            count += inventory.GetItemQuantity( ids[ k ] );
++        }
++    }
++    return count;
++}
++
++@addMethod( GwmData ) function LocalSellerText( idx : int, show : bool ) : string
++{
++    var count : int;
++    if ( !show || pins[ idx ].store == "" ) { return ""; }
++    if ( pins[ idx ].storeGoneFact != "" && FactsQuerySum( pins[ idx ].storeGoneFact ) > 0 )
++    {
++        return " 购牌：此商店已不可用。";
++    }
++    count = LocalPurchaseRemaining( idx );
++    if ( count > 0 ) { return " 购牌：尚余 " + count + " 张昆特牌（最近一次实际商店核验，含复数卡）。"; }
++    if ( count == 0 ) { return " 购牌：最近一次实际商店核验已无可售昆特牌。"; }
++    if ( SellsCardsYouLack( idx ) )
++    {
++        return " 购牌候选：此商店的已知牌单中有卡组尚缺的牌；远程库存未核实。";
++    }
++    return " 购牌待核实：已有对应牌种，不代表买齐所有复数卡；远程库存未加载。";
++}
++
++// Independent bag pins remain visible even with defeated opponents hidden.
++// They are filed under Gwent so the Gwent-only filter includes purchase reminders too.
++@addMethod( CR4MapMenu ) function GwmAppendShopPins( out flashArray : CScriptedFlashArray, data : GwmData, worldKey : string, show : bool )
++{
++    var i, count : int;
++    var pos : Vector;
++    var obj : CScriptedFlashObject;
++    var mapManager : CCommonMapManager;
++    if ( !show ) { return; }
++    mapManager = theGame.GetCommonMapManager();
++    for ( i = 0; i < data.pins.Size(); i += 1 )
++    {
++        if ( data.pins[ i ].world != worldKey || data.pins[ i ].store == "" || data.IsUnavailable( i ) ) { continue; }
++        if ( data.pins[ i ].storeGoneFact != "" && FactsQuerySum( data.pins[ i ].storeGoneFact ) > 0 ) { continue; }
++        count = data.LocalPurchaseRemaining( i );
++        if ( count == 0 ) { continue; }
++        pos = Vector( data.pins[ i ].x - 18, data.pins[ i ].y, 0 );
++        obj = GetMenuFlashValueStorage().CreateTempFlashObject( "red.game.witcher3.data.StaticMapPinData" );
++        obj.SetMemberFlashUInt( "id", 1196893968 + data.pins[ i ].id );
++        obj.SetMemberFlashUInt( "areaId", NameToFlashUInt( m_shownArea ) );
++        obj.SetMemberFlashUInt( "journalAreaId", NameToFlashUInt( mapManager.GetJournalAreaByPosition( m_shownArea, pos ) ) );
++        obj.SetMemberFlashNumber( "posX", pos.X );
++        obj.SetMemberFlashNumber( "posY", pos.Y );
++        obj.SetMemberFlashString( "type", "Shopkeeper" );
++        obj.SetMemberFlashString( "filteredType", "GwentPlayer" );
++        obj.SetMemberFlashNumber( "radius", 0 );
++        obj.SetMemberFlashBool( "isFastTravel", false );
++        obj.SetMemberFlashBool( "isQuest", false );
++        obj.SetMemberFlashBool( "isPlayer", false );
++        obj.SetMemberFlashBool( "isUserPin", false );
++        obj.SetMemberFlashNumber( "distance", 0 );
++        obj.SetMemberFlashString( "label", GwmLoc( "gwm_label_gwent_player", "Gwent player" ) );
++        obj.SetMemberFlashString( "description", "【购牌】" + GwmRoleText( data.pins[ i ] ) + data.LocalSellerText( i, true ) );
++        flashArray.PushBackFlashObject( obj );
++    }
++}
++
++// Local.3: per-save trade observations and nearby native minimap reminders.
++// Never infer that a shop is empty from an unloaded NPC or from owning one card copy.
++@addMethod( GwmData ) function LocalCountShopCards( inventory : CInventoryComponent ) : int
++{
++    var ids : array< SItemUniqueId >;
++    var i, count : int;
++    if ( !inventory ) { return -1; }
++    inventory.GetAllItems( ids );
++    for ( i = 0; i < ids.Size(); i += 1 )
++    {
++        if ( inventory.ItemHasTag( ids[ i ], 'GwintCard' ) )
++        {
++            count += inventory.GetItemQuantity( ids[ i ] );
++        }
++    }
++    return count;
++}
++
++@addMethod( GwmData ) function LocalShopIndex( npc : CNewNPC ) : int
++{
++    var i, candidate, matches : int;
++    var world : string;
++    var pos : Vector;
++    if ( !npc ) { return -1; }
++    world = GwmCurrentWorldKey();
++    for ( i = 0; i < pins.Size(); i += 1 )
++    {
++        if ( pins[ i ].world == world && pins[ i ].store != "" && IsNameValid( pins[ i ].tag ) && npc.HasTag( pins[ i ].tag ) ) { return i; }
++    }
++    // A few fixed quest innkeepers have no known tag. Only accept a unique nearby
++    // tagless shop, using the actual merchant's position, never the player's position.
++    candidate = -1;
++    for ( i = 0; i < pins.Size(); i += 1 )
++    {
++        if ( pins[ i ].world != world || pins[ i ].store == "" || IsNameValid( pins[ i ].tag ) ) { continue; }
++        pos = Vector( pins[ i ].x, pins[ i ].y, 0 );
++        if ( VecDistanceSquared2D( npc.GetWorldPosition(), pos ) < 8 * 8 )
++        {
++            candidate = i;
++            matches += 1;
++        }
++    }
++    if ( matches == 1 ) { return candidate; }
++    return -1;
++}
++
++@addMethod( GwmData ) function LocalObserveShop( npc : CNewNPC, inventory : CInventoryComponent )
++{
++    var idx, count : int;
++    var seenKey, leftKey : string;
++    var actorTag : name;
++    idx = LocalShopIndex( npc );
++    if ( idx < 0 || !inventory ) { return; }
++    count = LocalCountShopCards( inventory );
++    if ( count < 0 ) { return; }
++    seenKey = "gwm_shop_seen_" + pins[ idx ].id;
++    leftKey = "gwm_shop_left_" + pins[ idx ].id;
++    if ( FactsQuerySum( seenKey ) == 0 || FactsQuerySum( leftKey ) != count )
++    {
++        FactsSet( leftKey, count, -1 );
++        FactsSet( seenKey, 1, -1 );
++    }
++    actorTag = StringToName( "gwm_shop_actor_" + pins[ idx ].id );
++    if ( !npc.HasTag( actorTag ) ) { npc.AddTag( actorTag ); }
++}
++
++@addMethod( GwmData ) function LocalKnownNpc( idx : int ) : CNewNPC
++{
++    var npc : CNewNPC;
++    if ( pins[ idx ].world != GwmCurrentWorldKey() ) { return NULL; }
++    if ( IsNameValid( pins[ idx ].tag ) ) { npc = theGame.GetNPCByTag( pins[ idx ].tag ); }
++    if ( !npc ) { npc = theGame.GetNPCByTag( StringToName( "gwm_shop_actor_" + pins[ idx ].id ) ); }
++    return npc;
++}
++
++@addMethod( GwmData ) function LocalPurchaseRemaining( idx : int ) : int
++{
++    var live : int;
++    // Only the real trade UI writes these facts. Read them on every query, so
++    // switching to another save/new game cannot reuse another save's purchase state.
++    if ( FactsQuerySum( "gwm_shop_seen_" + pins[ idx ].id ) > 0 )
++    {
++        return Max( 0, FactsQuerySum( "gwm_shop_left_" + pins[ idx ].id ) );
++    }
++    live = LocalLiveStock( idx );
++    // A streamed entity with an uninitialised inventory is not proof of buying out a shop.
++    if ( live == 0 ) { return -1; }
++    return live;
++}
++
++@wrapMethod( CR4InventoryMenu ) function UpdateMerchantData() : void
++{
++    wrappedMethod();
++    // Vanilla invokes this on opening a shop and after a successful buy/sell.
++    if ( _shopNpc && _shopInv )
++    {
++        GwmGetData().LocalObserveShop( _shopNpc, _shopInv.GetInventoryComponent() );
++    }
++}
++
++@addField( GwmData ) var localMiniTags : array< name >;
++@addField( GwmData ) var localMiniTypes : array< name >;
++
++@addMethod( GwmData ) function LocalUpdateMinimap()
++{
++    var i, j, stock : int;
++    var npc, oldNpc : CNewNPC;
++    var markerTag, markerType : name;
++    var nextTags, nextTypes : array< name >;
++    var manager : CCommonMapManager;
++    var world : string;
++    var enabled, sellers : bool;
++    if ( !thePlayer || !theGame.IsActive() ) { return; }
++    manager = theGame.GetCommonMapManager();
++    world = GwmCurrentWorldKey();
++    enabled = GwmConfigBool( 'GwmShowPins', true );
++    sellers = GwmConfigBool( 'GwmShowSellers', true );
++    for ( i = 0; i < pins.Size(); i += 1 )
++    {
++        if ( !enabled || world == "" || pins[ i ].world != world || IsUnavailable( i ) ) { continue; }
++        npc = LocalKnownNpc( i );
++        if ( !npc || VecDistanceSquared2D( npc.GetWorldPosition(), thePlayer.GetWorldPosition() ) > 150 * 150 ) { continue; }
++        markerType = '';
++        if ( !IsDefeated( i ) ) { markerType = 'User1'; }
++        else if ( sellers && pins[ i ].store != "" )
++        {
++            if ( pins[ i ].storeGoneFact == "" || FactsQuerySum( pins[ i ].storeGoneFact ) == 0 )
++            {
++                stock = LocalPurchaseRemaining( i );
++                if ( stock != 0 ) { markerType = 'User2'; }
++            }
++        }
++        if ( !IsNameValid( markerType ) ) { continue; }
++        // One reminder per actor avoids two icons on top of each other: duel first,
++        // then purchase. Uses native minimap-supported symbols, not the world-map SWF.
++        markerTag = StringToName( "gwm_mini_" + pins[ i ].id );
++        if ( !npc.HasTag( markerTag ) ) { npc.AddTag( markerTag ); }
++        for ( j = 0; j < localMiniTags.Size(); j += 1 )
++        {
++            if ( localMiniTags[ j ] == markerTag && localMiniTypes[ j ] != markerType )
++            {
++                manager.EnableDynamicMappin( markerTag, false, localMiniTypes[ j ], false, false );
++            }
++        }
++        manager.EnableDynamicMappin( markerTag, true, markerType, false, false );
++        nextTags.PushBack( markerTag );
++        nextTypes.PushBack( markerType );
++    }
++    for ( i = 0; i < localMiniTags.Size(); i += 1 )
++    {
++        if ( !nextTags.Contains( localMiniTags[ i ] ) )
++        {
++            manager.EnableDynamicMappin( localMiniTags[ i ], false, localMiniTypes[ i ], false, false );
++            oldNpc = theGame.GetNPCByTag( localMiniTags[ i ] );
++            if ( oldNpc ) { oldNpc.RemoveTag( localMiniTags[ i ] ); }
++        }
++    }
++    localMiniTags = nextTags;
++    localMiniTypes = nextTypes;
++}
++
++@addField( CR4HudModuleMinimap2 ) var gwmMiniElapsed : float;
++@wrapMethod( CR4HudModuleMinimap2 ) function UpdatePlayerPositionAndRotation( timeDelta : float )
++{
++    wrappedMethod( timeDelta );
++    gwmMiniElapsed += timeDelta;
++    if ( gwmMiniElapsed >= 1.0 )
++    {
++        gwmMiniElapsed = 0;
++        GwmGetData().LocalUpdateMinimap();
++    }
++}
+--- a/bin/config/r4game/user_config_matrix/pc/modGwentPlayersMap.xml
++++ b/bin/config/r4game/user_config_matrix/pc/modGwentPlayersMap.xml
+@@ -6,7 +6,6 @@
+ 	<Group id="GwentPlayersMap" displayName="Mods.gwentplayersmap">
+ 		<VisibleVars>
+ 			<Var id="GwmShowPins" displayName="gwm_show_pins" displayType="TOGGLE"/>
+-			<Var id="GwmShowDefeated" displayName="gwm_show_defeated" displayType="TOGGLE"/>
+ 			<Var id="GwmShowSellers" displayName="gwm_show_sellers" displayType="TOGGLE"/>
+ 			<Var id="GwmCardSize" displayName="gwm_card_size" displayType="OPTIONS">
+ 				<OptionsArray>

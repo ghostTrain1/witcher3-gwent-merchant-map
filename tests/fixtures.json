@@ -1,0 +1,16 @@
+[
+ {"name":"save_A_bought_all_near","seen":true,"left":0,"live":0,"won":true,"seller":true,"loaded":true,"distance":10,"expected":{"buy":false,"duel":false,"mini":"","remaining":0}},
+ {"name":"save_A_bought_all_unloaded","seen":true,"left":0,"live":-1,"won":true,"seller":true,"loaded":false,"distance":500,"expected":{"buy":false,"duel":false,"mini":"","remaining":0}},
+ {"name":"save_B_same_merchant_partial","seen":true,"left":2,"live":-1,"won":true,"seller":true,"loaded":true,"distance":10,"expected":{"buy":true,"duel":false,"mini":"User2","remaining":2}},
+ {"name":"new_game_same_merchant_unknown","seen":false,"left":0,"live":-1,"won":false,"seller":true,"loaded":true,"distance":10,"expected":{"buy":true,"duel":true,"mini":"User1","remaining":-1}},
+ {"name":"return_to_save_A_no_cross_save_cache","seen":true,"left":0,"live":-1,"won":true,"seller":true,"loaded":true,"distance":10,"expected":{"buy":false,"duel":false,"mini":"","remaining":0}},
+ {"name":"before_last_card","seen":true,"left":1,"live":1,"won":true,"seller":true,"loaded":true,"distance":10,"expected":{"buy":true,"duel":false,"mini":"User2","remaining":1}},
+ {"name":"after_last_card","seen":true,"left":0,"live":0,"won":true,"seller":true,"loaded":true,"distance":10,"expected":{"buy":false,"duel":false,"mini":"","remaining":0}},
+ {"name":"failed_purchase_count_unchanged","seen":true,"left":1,"live":1,"won":true,"seller":true,"loaded":true,"distance":10,"expected":{"buy":true,"duel":false,"mini":"User2","remaining":1}},
+ {"name":"duplicate_cards_two_left","seen":true,"left":2,"live":2,"won":true,"seller":true,"loaded":true,"distance":10,"expected":{"buy":true,"duel":false,"mini":"User2","remaining":2}},
+ {"name":"unknown_loaded_zero_not_sold_out_proof","seen":false,"left":0,"live":0,"won":true,"seller":true,"loaded":true,"distance":10,"expected":{"buy":true,"duel":false,"mini":"User2","remaining":-1}},
+ {"name":"cards_bought_but_duel_remains","seen":true,"left":0,"live":0,"won":false,"seller":true,"loaded":true,"distance":10,"expected":{"buy":false,"duel":true,"mini":"User1","remaining":0}},
+ {"name":"mini_out_of_range","seen":true,"left":3,"live":3,"won":false,"seller":true,"loaded":true,"distance":151,"expected":{"buy":true,"duel":true,"mini":"","remaining":3}},
+ {"name":"non_seller_still_duel","seen":false,"left":0,"live":-1,"won":false,"seller":false,"loaded":true,"distance":20,"expected":{"buy":false,"duel":true,"mini":"User1","remaining":-1}},
+ {"name":"both_done_hide_both","seen":true,"left":0,"live":-1,"won":true,"seller":true,"loaded":true,"distance":30,"expected":{"buy":false,"duel":false,"mini":"","remaining":0}}
+]

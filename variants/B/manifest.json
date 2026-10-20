@@ -1,0 +1,98 @@
+{
+  "variant": "B",
+  "version": "1.0.9-local.3",
+  "files": [
+    {
+      "path": "bin/config/r4game/user_config_matrix/pc/modGwentPlayersMap.xml",
+      "sha256": "bc6522e3917d3e95d6e8c35c27d9380c83af5b54f94c377685a76aa79a243f47"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/ar.w3strings",
+      "sha256": "d6da69d9a0a9b5349c878d69cb41eaba9f7ad40ab5e0a1a1595fe65b2f7fad64"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/blob0.bundle",
+      "sha256": "0fe4fb954570c7a89d7cd9a0af9699390e425e286e0da494049543bcfa0ca840"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/br.w3strings",
+      "sha256": "dddce76ee9a28d422c8837443d54e58946aa06c502c30790356b114529ba573d"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/cn.w3strings",
+      "sha256": "68d4a34469e918e85c0425c13d199ed79b93a76fee38a7fce520d13282f1f11d"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/cz.w3strings",
+      "sha256": "3353ebe244bdec759c39f7958b3696f2bdb602d73cffe0a65e0482afea27fd8b"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/de.w3strings",
+      "sha256": "b60092c44877727a40a020a84ce0a5773605159f8869cbcd87d898e1c6c26921"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/en.w3strings",
+      "sha256": "28b502dbb7b4805047750e46bcde743190257820bd42a70f09ca4a36a9b16a67"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/es.w3strings",
+      "sha256": "0707a5dbec505ae1927d77403a72f86eb1d4d0b08caad4c227982ba0ea07b53d"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/esmx.w3strings",
+      "sha256": "0707a5dbec505ae1927d77403a72f86eb1d4d0b08caad4c227982ba0ea07b53d"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/fr.w3strings",
+      "sha256": "273ee937e313245d1e0a4da310d9c8cf5b9f124a24a8fee5bcdf69079e27f0cf"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/hu.w3strings",
+      "sha256": "b4db9cc3b0f989389cf2ff28cb6533c664aa8ed627b36374ec9056d2cf84a188"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/it.w3strings",
+      "sha256": "40ebdd362256c141e1f83c96bf04530025f2a853ee8a5c528c90803bb45cb2c1"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/jp.w3strings",
+      "sha256": "b720dcd0f88aa1fd41c9cc177ad594cfddd055605b2a1cfd9616ab13b463477a"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/kr.w3strings",
+      "sha256": "9f83df320129db0860ceebb20830ad350b0c55e72571b9d36922632d9af89b09"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/metadata.store",
+      "sha256": "d4774e5fbbbe2689eb1a227825a92c6d90aab34798443d19c537ef29be090f9b"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/pl.w3strings",
+      "sha256": "3e34e580c06a819b9f00af5f745190d00133ae4fb2de7106b17329f3b4da3ecb"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/ru.w3strings",
+      "sha256": "8c0782037093bdb04f8df736a0fbbaeb3833e331cdd7537636fb315346878a24"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/scripts/local/gwm.ws",
+      "sha256": "07a60ac27225d12c297c48278b60ebc5b5a06fc4c278662d1378685cf020f31c"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/scripts/local/gwm_data.ws",
+      "sha256": "29621bb87828df8444253b1a1f8ec343e0b3238bf4ef732b740fddcea45ff722"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/tr.w3strings",
+      "sha256": "0471f3eaa76b0141b61ab033fd5ba0e7b80b8354433874d9232bd07550a405fe"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/ua.w3strings",
+      "sha256": "c5e8d08a829578a01e81fde63d23e4ebb3a432d83a9f4613cda85e2ef46a6987"
+    },
+    {
+      "path": "mods/modGwentPlayersMap/content/zh.w3strings",
+      "sha256": "80b17a65715bcb935328a238c34432556b7cc9533185342643f9b944a1a70394"
+    }
+  ]
+}
